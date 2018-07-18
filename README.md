@@ -1,5 +1,5 @@
 # weChatPro
-通过 itchat  练习 python
+itchat  开发微信工具
 #### 开发环境
 ###### python3.6
 ###### [mac-osx 版本安装](https://www.python.org/downloads/mac-osx/)
