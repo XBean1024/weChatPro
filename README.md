@@ -97,7 +97,7 @@
             imgFile.close()
 
 
-######头像拼接图
+###### 头像拼接图
     def createImg():
         x = 0
         y = 0
