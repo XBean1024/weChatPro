@@ -2,9 +2,7 @@
 通过 itchat  练习 python
 #### 开发环境
 ###### python3.6
-    [](https://www.python.org/downloads/mac-osx/)
-    [mac-osx][url name] [url name]: http://www.baidu.com
-    欢迎大家访问<a href="http://write.blog.csdn.net/postlist" target="_blank">麦田里的码农</a>
+###### [mac-osx 版本安装](https://www.python.org/downloads/mac-osx/)
 ###### itchat 安装
     pip install itchat
 
