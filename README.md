@@ -131,4 +131,4 @@
         newImg.save("all.png")
         print("保存完成")
 ###### 视图
-![](https://github.com/Xbean1024/weChatPro/blob/master/all.png)
+![](https://github.com/Xbean1024/weChatPro/blob/master/wechat/all.png)
