@@ -1,18 +1,16 @@
 # -*- coding:utf-8 -*-
-import time
-from io import StringIO
-import itchat
-import os
 import math
-import matplotlib.pyplot as plt
+import os
 import random
+import re
+import time
+
 import Image
+import itchat
+import matplotlib.pyplot as plt
+import pygame
 from PIL import ImageFont
 from wordcloud import WordCloud
-import jieba
-import re
-import pygame
-import os
 
 
 def mkdir(path):
