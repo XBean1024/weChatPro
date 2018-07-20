@@ -1,4 +1,5 @@
 # -*- coding:utf-8 -*-
+import json
 import math
 import os
 import random
@@ -15,6 +16,8 @@ from wordcloud import WordCloud
 # noinspection PyGlobalUndefined
 global account
 
+global imgPath
+
 
 def mkdir(path):
     folder = os.path.exists(path)
@@ -27,16 +30,17 @@ def mkdir(path):
 
 # 获取头像
 def headImg():
+    mkImgFile()  # 获取头像
     print("正在获取头像……………………")
     friends = itchat.get_friends(update=True)
     # itchat.get_head_img() 获取到头像二进制，并写入文件，保存每张头像
     print("您的好友总数为：" + str(len(friends)))
-    mkdir(account)  # 调用函数
+
     for count, f in enumerate(friends):
         # 根据userName获取头像
         print("正在创建第" + str(count) + "头像")
         img = itchat.get_head_img(userName=f["UserName"])
-        imgFile = open(account + "/" + str(count) + ".png", "wb")
+        imgFile = open(imgPath + "/" + str(count) + ".png", "wb")
         imgFile.write(img)
         imgFile.close()
 
@@ -61,6 +65,14 @@ def sortFile(l):
     print('Recover:')
     print(l)
     return l
+
+
+# 创建头像拼图的文件夹
+def mkImgFile():
+    global imgPath
+    imgPath = "img/" + account
+    mkdir(imgPath)
+    print("头像拼图的文件夹 ：" + imgPath)
 
 
 # 头像拼接图
@@ -101,8 +113,9 @@ def createImg(dotPx, img_name):
     # newImg = Image.new('RGBA', (resolution, resolution), (0, 255, 0))
     newImg = Image.new('RGBA', (resolutionX, resolutionX))
     print("大图分辨率 = " + str(resolutionX) + "*" + str(resolutionX))
+    mkImgFile()  # 头像拼接图
     for count, i in enumerate(imgs):
-        path = account + "/" + i
+        path = imgPath + "/" + i
         try:
             if os.path.getsize(path) == 0:  # 获取文件大小
                 os.remove(path)
@@ -120,6 +133,7 @@ def createImg(dotPx, img_name):
         except IOError as e:
             print(repr(e))
             # continue
+
     newImg.save(img_name + ".png")
     print("保存完成！文件名为---" + img_name)
 
@@ -174,9 +188,11 @@ def getSignature():
     saveTxtToPNG(text)
 
 
-def saveFile(strs):
-    file = open('name_sign.txt', 'a', encoding='utf-8')
-    file.write(strs + "\n")
+# 保存本本信息
+def saveText(file_name, text_save):
+    mkdir(file_name)
+    file = open(file_name + "/" + account + '.txt', 'a', encoding='utf-8')
+    file.write(text_save + "\n")
 
 
 # 生成词云图
@@ -241,7 +257,8 @@ def saveTxtToPNG(text):
 def getFriendsList():
     print("获取成员列……")
     fds = itchat.get_friends(update=True)
-    saveFile(str(fds))
+    format_output(fds)  # 获取成员列表
+    saveText(file_name="account", text_save=str(format_output(fds)))
     print(fds)
     fs = []
     for count, f in enumerate(fds):
@@ -289,31 +306,53 @@ def login():
     print("扫码登陆……")
     itchat.auto_login(hotReload=True)
     print("登陆成功……获取微信联系人信息")
+    getAccount()
+
+
+def loginWithAutoReply():
+    print("带自动回复的登录……")
+    itchat.auto_login(hotReload=True)
+    getAccount()
+    itchat.run()
+
+
+def getAccount():
+    print("获取微信联系人……")
     friends = itchat.get_friends(update=True)
     print("打印联系人信息……")
-    print(friends[0]["PYQuanPin"])
+    print("登录账号为 ：" + friends[0]["PYQuanPin"])
     global account
     account = friends[0]["PYQuanPin"]
 
 
+@itchat.msg_register(itchat.content.TEXT)  # msg.text 就是回复的文本信息内容
+def text_reply(msg):
+    format_output(msg)  # 文本信息回复
+    return '微信自动回复 ：' + msg.text
+
+
+@itchat.msg_register(itchat.content.PICTURE)
+def pic_reply(msg):
+    print(msg)
+
+
+def format_output(json_str):
+    print("格式化输出 json :")
+    json_str = json.dumps(json_str, sort_keys=True, indent=4, separators=(',', ':'))
+    print(json_str)
+    return json_str
+
+
 if __name__ == "__main__":
     login()
+    # loginWithAutoReply()
     # print(itchat.search_friends())  # 获取自己的用户信息，返回自己的属性字典
     # print(itchat.search_friends(wechatAccount='qq18667155877'))  # 获取特定UserName的用户信息
 
-    """
-    itchat.auto_login(hotReload=True)
-    @itchat.msg_register(itchat.content.TEXT) # msg.text 就是回复的文本信息内容
-    def text_reply(msg):
-        return '自动回复测试 ：' + msg.text
-    itchat.run()
-    """
-
     # itchat.send('Hello, filehelper', toUserName='filehelper')# 发送信息给文件助手
 
-    # headImg()
-    print("登录账户为---" + account)
-    createImg(dotPx=110, img_name=account)  # 合成图片
+    headImg()
+    # createImg(dotPx=110, img_name=account)  # 合成图片
     # removeIpg()
     # getSignature()
     # getFriendsList()
