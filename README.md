@@ -1,12 +1,12 @@
 # weChatPro
-#### 开发环境
-###### python3.6
-###### [mac-osx 版本安装](https://www.python.org/downloads/mac-osx/)
-###### itchat 安装
+### 开发环境
+##### python3.6
+##### [mac-osx 版本安装](https://www.python.org/downloads/mac-osx/)
+##### itchat 安装
     pip install itchat
 
  
-###### 群发消息
+##### 群发消息
     def sendGroupAssistant():
         SINCERE_WISH = u'你的名字\n\t祝 %s[%s]新年快乐！么么哒'
     
@@ -24,7 +24,7 @@
             time.sleep(.5)
         print("群发完成")
         
-###### 获取朋友信息
+##### 获取朋友信息
 
     def getFriendsList():
         print("获取成员列……")
@@ -36,7 +36,7 @@
             print(nickname)
             fs.append(nickname)
         return fs
-###### 将文本保存为图片（获取个性签名中 有用到）
+##### 将文本保存为图片（获取个性签名中 有用到）
 
     def saveTxtToPNG(text):
         print("将文本保存为图片")
@@ -54,7 +54,7 @@
         im.save("t.png")
         print("保存为图片--Done")
         
-###### 获取个性签名
+##### 获取个性签名
     def getSignature():
         friends = itchat.get_friends(update=True)
         print(friends)
@@ -81,7 +81,7 @@
                 text = text + "签名：" + signature + "\n"
             file.write(strs + "\n")
         saveTxtToPNG(text)
-###### 获取头像，并保存
+##### 获取头像，并保存
     def headImg():
         print("正在获取头像……………………")
         friends = itchat.get_friends(update=True)
@@ -97,7 +97,7 @@
             imgFile.close()
 
 
-###### 头像拼接图
+##### 头像拼接图
     def createImg():
         x = 0
         y = 0
@@ -130,5 +130,18 @@
                 # continue
         newImg.save("all.png")
         print("保存完成")
-###### 视图
+##### 视图
 ![](https://github.com/Xbean1024/weChatPro/blob/master/wechat/all.png)
+##### 全局变量
+    告诉编译器这是全局变量a
+    global a
+    
+    def set_value(value):
+        # 告诉编译器我在这个方法中使用的a是刚才定义的全局变量a,而不是方法内部的局部变量.
+        global a
+        a = value
+    
+    def get_value():
+        # 同样告诉编译器我在这个方法中使用的a是刚才定义的全局变量a,并返回全局变量a,而不是方法内部的局部变量.
+        global a
+        return a

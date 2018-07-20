@@ -12,7 +12,8 @@ import pygame
 from PIL import ImageFont
 from wordcloud import WordCloud
 
-wxCount = ""
+# noinspection PyGlobalUndefined
+global account
 
 
 def mkdir(path):
@@ -30,12 +31,12 @@ def headImg():
     friends = itchat.get_friends(update=True)
     # itchat.get_head_img() 获取到头像二进制，并写入文件，保存每张头像
     print("您的好友总数为：" + str(len(friends)))
-    mkdir("img")  # 调用函数
+    mkdir(account)  # 调用函数
     for count, f in enumerate(friends):
         # 根据userName获取头像
         print("正在创建第" + str(count) + "头像")
         img = itchat.get_head_img(userName=f["UserName"])
-        imgFile = open("img/" + str(count) + ".png", "wb")
+        imgFile = open(account + "/" + str(count) + ".png", "wb")
         imgFile.write(img)
         imgFile.close()
 
@@ -74,7 +75,7 @@ def createImg(dotPx, img_name):
 
     x = 0
     y = 0
-    imgs = os.listdir("img")
+    imgs = os.listdir(account)
     # random.shuffle(imgs)
     imgs = sortFile(imgs)
     count = len(imgs)
@@ -82,7 +83,7 @@ def createImg(dotPx, img_name):
 
     # 每张图片的像素数
     # 每行图片数
-    numLine = int(math.sqrt(count))+1
+    numLine = int(math.sqrt(count)) + 1
     print("每行图片数 = " + str(numLine))
     # # 图片宽度
     # widthTotalLengthPx = numLine * dotPx
@@ -101,7 +102,7 @@ def createImg(dotPx, img_name):
     newImg = Image.new('RGBA', (resolutionX, resolutionX))
     print("大图分辨率 = " + str(resolutionX) + "*" + str(resolutionX))
     for count, i in enumerate(imgs):
-        path = "img/" + i
+        path = account + "/" + i
         try:
             if os.path.getsize(path) == 0:  # 获取文件大小
                 os.remove(path)
@@ -120,7 +121,7 @@ def createImg(dotPx, img_name):
             print(repr(e))
             # continue
     newImg.save(img_name + ".png")
-    print("保存完成！")
+    print("保存完成！文件名为---" + img_name)
 
 
 # 性别统计
@@ -266,7 +267,6 @@ def createChatRoom():
 
 def sendGroupAssistant():
     SINCERE_WISH = u'许彬彬\n\t祝 %s[%s]新年快乐！么么哒'
-
     friendList = itchat.get_friends(update=True)[0:]  # 排除登录者本人的微信
     print("开始群发消息")
     print("您总共有 " + str(len(friendList)) + " 个好友")
@@ -288,13 +288,16 @@ def sendGroupAssistant():
 def login():
     print("扫码登陆……")
     itchat.auto_login(hotReload=True)
-    # friends = itchat.get_friends(update=True)
-    # print(friends)
+    print("登陆成功……获取微信联系人信息")
+    friends = itchat.get_friends(update=True)
+    print("打印联系人信息……")
+    print(friends[0]["PYQuanPin"])
+    global account
+    account = friends[0]["PYQuanPin"]
 
 
 if __name__ == "__main__":
-    # login()
-    print("登陆成功……")
+    login()
     # print(itchat.search_friends())  # 获取自己的用户信息，返回自己的属性字典
     # print(itchat.search_friends(wechatAccount='qq18667155877'))  # 获取特定UserName的用户信息
 
@@ -309,7 +312,8 @@ if __name__ == "__main__":
     # itchat.send('Hello, filehelper', toUserName='filehelper')# 发送信息给文件助手
 
     # headImg()
-    createImg(dotPx=110, img_name="kuan")  # 合成图片
+    print("登录账户为---" + account)
+    createImg(dotPx=110, img_name=account)  # 合成图片
     # removeIpg()
     # getSignature()
     # getFriendsList()
