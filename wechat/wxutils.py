@@ -12,6 +12,8 @@ import pygame
 from PIL import ImageFont
 from wordcloud import WordCloud
 
+wxCount = ""
+
 
 def mkdir(path):
     folder = os.path.exists(path)
@@ -38,18 +40,66 @@ def headImg():
         imgFile.close()
 
 
+def sortFile(l):
+    print('Before:')
+    print(l)
+    for i in range(len(l)):
+        l[i] = l[i].split('.')
+        l[i][0] = int(l[i][0])
+    print('After:')
+
+    print(l)
+    l.sort()
+    print('Sorted:')
+
+    print(l)
+
+    for i in range(len(l)):
+        l[i][0] = str(l[i][0])
+        l[i] = l[i][0] + '.' + l[i][1]
+    print('Recover:')
+    print(l)
+    return l
+
+
 # 头像拼接图
-def createImg():
+def createImg(dotPx, img_name):
+    """
+    :param img_name: 要保存的文件名
+    :param dotPx:  每张小图片的像素点数，越大越清晰
+    :return: 无
+
+    根据输入的像素值，和计算出来的 图片总数,来获取大图分辨率
+    """
+
     x = 0
     y = 0
     imgs = os.listdir("img")
-    random.shuffle(imgs)
-    # 创建640*640的图片用于填充各小图片
-    newImg = Image.new('RGBA', (640, 640))
-    # 以640*640来拼接图片，math.sqrt()开平方根计算每张小图片的宽高，
-    width = int(math.sqrt(640 * 640 / len(imgs)))
+    # random.shuffle(imgs)
+    imgs = sortFile(imgs)
+    count = len(imgs)
+    print("图片总数 = " + str(count))  # 1000
+
+    # 每张图片的像素数
     # 每行图片数
-    numLine = 640 / width
+    numLine = int(math.sqrt(count))+1
+    print("每行图片数 = " + str(numLine))
+    # # 图片宽度
+    # widthTotalLengthPx = numLine * dotPx
+    # # 列数
+    # numColumn = int(count / numLine) + 1
+    # # 图片的高度
+    # heightTotalLengthPx = dotPx * numColumn
+    #
+    # # 最终的宽高
+    # size = math.sqrt(math.pow(widthTotalLengthPx, 2) + math.pow(heightTotalLengthPx, 2))
+    width = dotPx
+    print("小图片宽度 = " + str(width))
+    resolutionX = numLine * dotPx
+    # Image.new('颜色模式', (宽, 高),(背景色))
+    # newImg = Image.new('RGBA', (resolution, resolution), (0, 255, 0))
+    newImg = Image.new('RGBA', (resolutionX, resolutionX))
+    print("大图分辨率 = " + str(resolutionX) + "*" + str(resolutionX))
     for count, i in enumerate(imgs):
         path = "img/" + i
         try:
@@ -69,7 +119,8 @@ def createImg():
         except IOError as e:
             print(repr(e))
             # continue
-    newImg.save("all.png")
+    newImg.save(img_name + ".png")
+    print("保存完成！")
 
 
 # 性别统计
@@ -120,6 +171,11 @@ def getSignature():
             text = text + "签名：" + signature + "\n"
         file.write(strs + "\n")
     saveTxtToPNG(text)
+
+
+def saveFile(strs):
+    file = open('name_sign.txt', 'a', encoding='utf-8')
+    file.write(strs + "\n")
 
 
 # 生成词云图
@@ -184,6 +240,7 @@ def saveTxtToPNG(text):
 def getFriendsList():
     print("获取成员列……")
     fds = itchat.get_friends(update=True)
+    saveFile(str(fds))
     print(fds)
     fs = []
     for count, f in enumerate(fds):
@@ -228,13 +285,19 @@ def sendGroupAssistant():
     print("群发完成")
 
 
-if __name__ == "__main__":
+def login():
     print("扫码登陆……")
     itchat.auto_login(hotReload=True)
+    # friends = itchat.get_friends(update=True)
+    # print(friends)
+
+
+if __name__ == "__main__":
+    # login()
     print("登陆成功……")
     # print(itchat.search_friends())  # 获取自己的用户信息，返回自己的属性字典
     # print(itchat.search_friends(wechatAccount='qq18667155877'))  # 获取特定UserName的用户信息
-    
+
     """
     itchat.auto_login(hotReload=True)
     @itchat.msg_register(itchat.content.TEXT) # msg.text 就是回复的文本信息内容
@@ -244,12 +307,11 @@ if __name__ == "__main__":
     """
 
     # itchat.send('Hello, filehelper', toUserName='filehelper')# 发送信息给文件助手
-    # friends = itchat.get_friends(update=True)
-    # print(friends)
+
     # headImg()
-    # createImg()
+    createImg(dotPx=110, img_name="kuan")  # 合成图片
     # removeIpg()
     # getSignature()
     # getFriendsList()
     # createChatRoom()
-    sendGroupAssistant()  # 群发微信消息
+    # sendGroupAssistant()  # 群发微信消息
