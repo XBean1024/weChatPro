@@ -190,9 +190,11 @@ def getSignature():
 
 # 保存本本信息
 def saveText(file_name, text_save):
+    print("保存联系人信息……")
     mkdir(file_name)
-    file = open(file_name + "/" + account + '.txt', 'a', encoding='utf-8')
+    file = open(file_name + "/" + account, 'a', encoding='utf-8')
     file.write(text_save + "\n")
+    print("保存联系人信息……Done!")
 
 
 # 生成词云图
@@ -257,15 +259,15 @@ def saveTxtToPNG(text):
 def getFriendsList():
     print("获取成员列……")
     fds = itchat.get_friends(update=True)
-    format_output(fds)  # 获取成员列表
-    saveText(file_name="account", text_save=str(format_output(fds)))
+    fds = format_output(fds)  # 获取成员列表
+    saveText(file_name="account", text_save=fds)
     print(fds)
-    fs = []
-    for count, f in enumerate(fds):
-        nickname = f["NickName"].strip().replace("emoji", "").replace("span", "").replace("class", "")
-        print(nickname)
-        fs.append(nickname)
-    return fs
+    # fs = []
+    # for count, f in enumerate(fds):
+    #     nickname = f["NickName"].strip().replace("emoji", "").replace("span", "").replace("class", "")
+    #     print(nickname)
+    #     fs.append(nickname)
+    # return fs
 
 
 def createChatRoom():
@@ -338,8 +340,8 @@ def pic_reply(msg):
 
 def format_output(json_str):
     print("格式化输出 json :")
-    json_str = json.dumps(json_str, sort_keys=True, indent=4, separators=(',', ':'))
-    print(json_str)
+    json_str = json.dumps(json_str, sort_keys=True, indent=4, separators=(',', ':'), ensure_ascii=False)
+    # print(json_str)
     return json_str
 
 
@@ -351,10 +353,10 @@ if __name__ == "__main__":
 
     # itchat.send('Hello, filehelper', toUserName='filehelper')# 发送信息给文件助手
 
-    headImg()
+    # headImg()
     # createImg(dotPx=110, img_name=account)  # 合成图片
     # removeIpg()
     # getSignature()
-    # getFriendsList()
+    getFriendsList()
     # createChatRoom()
     # sendGroupAssistant()  # 群发微信消息
