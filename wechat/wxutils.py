@@ -29,7 +29,7 @@ def mkdir(path):
 
 
 # 获取头像
-def headImg():
+def get_head_image():
     mkImgFile()  # 获取头像
     print("正在获取头像……………………")
     friends = itchat.get_friends(update=True)
@@ -37,12 +37,18 @@ def headImg():
     print("您的好友总数为：" + str(len(friends)))
 
     for count, f in enumerate(friends):
-        # 根据userName获取头像
+        folder = os.path.exists(imgPath + "/" + str(count) + ".png")
+
+        if folder:
+            print("文件存在 " + str(count))
+            continue
         print("正在创建第" + str(count) + "头像")
+        # 根据userName获取头像
         img = itchat.get_head_img(userName=f["UserName"])
         imgFile = open(imgPath + "/" + str(count) + ".png", "wb")
         imgFile.write(img)
         imgFile.close()
+        print("文件创建完成！")
 
 
 def sortFile(l):
@@ -84,10 +90,10 @@ def createImg(dotPx, img_name):
 
     根据输入的像素值，和计算出来的 图片总数,来获取大图分辨率
     """
-
+    mkImgFile()  # 获取头像
     x = 0
     y = 0
-    imgs = os.listdir(account)
+    imgs = os.listdir(imgPath)
     # random.shuffle(imgs)
     imgs = sortFile(imgs)
     count = len(imgs)
@@ -133,9 +139,12 @@ def createImg(dotPx, img_name):
         except IOError as e:
             print(repr(e))
             # continue
+    folder = os.path.exists(imgPath+"_all")
 
-    newImg.save(img_name + ".png")
-    print("保存完成！文件名为---" + img_name)
+    if not folder:
+        mkdir(imgPath+"_all")
+    newImg.save(imgPath+"_all" + "/" + img_name + ".png")
+    print("img保存完成！文件名为---" + img_name)
 
 
 # 性别统计
@@ -353,10 +362,10 @@ if __name__ == "__main__":
 
     # itchat.send('Hello, filehelper', toUserName='filehelper')# 发送信息给文件助手
 
-    # headImg()
-    # createImg(dotPx=110, img_name=account)  # 合成图片
+    get_head_image()
+    createImg(dotPx=640, img_name=account)  # 合成图片
     # removeIpg()
     # getSignature()
-    getFriendsList()
+    # getFriendsList()
     # createChatRoom()
     # sendGroupAssistant()  # 群发微信消息
