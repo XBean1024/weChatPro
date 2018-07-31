@@ -1,8 +1,6 @@
 # -*- coding:utf-8 -*-
 import json
-import math
 import os
-import random
 import re
 import time
 
@@ -101,7 +99,7 @@ def createImg(dotPx, img_name):
 
     # 每张图片的像素数
     # 每行图片数
-    numLine = int(math.sqrt(count)) + 1
+    numLine = int(pygame.math.sqrt(count)) + 1
     print("每行图片数 = " + str(numLine))
     # # 图片宽度
     # widthTotalLengthPx = numLine * dotPx
@@ -139,11 +137,11 @@ def createImg(dotPx, img_name):
         except IOError as e:
             print(repr(e))
             # continue
-    folder = os.path.exists(imgPath+"_all")
+    folder = os.path.exists(imgPath + "_all")
 
     if not folder:
-        mkdir(imgPath+"_all")
-    newImg.save(imgPath+"_all" + "/" + img_name + ".png")
+        mkdir(imgPath + "_all")
+    newImg.save(imgPath + "_all" + "/" + img_name + ".png")
     print("img保存完成！文件名为---" + img_name)
 
 
@@ -279,20 +277,6 @@ def getFriendsList():
     # return fs
 
 
-def createChatRoom():
-    chatroomUserName = '@1234567'
-    friend = getFriendsList()
-    # friend = itchat.get_friends(update=True)
-    print(friend)
-    r = itchat.add_member_into_chatroom(chatroomUserName, friend)
-    print(r)
-    # if r['BaseResponse']['ErrMsg'] == '':
-    #     status = r['MemberList'][0]['MemberStatus']
-    #     # itchat.delete_member_from_chatroom(chatroom['UserName'], [friend])
-    #     return {3: u'该好友已经将你加入黑名单。',
-    #             4: u'该好友已经将你删除。', }.get(status,u'该好友仍旧与你是好友关系。')
-
-
 def sendGroupAssistant():
     SINCERE_WISH = u'许彬彬\n\t祝 %s[%s]新年快乐！么么哒'
     friendList = itchat.get_friends(update=True)[0:]  # 排除登录者本人的微信
@@ -317,7 +301,6 @@ def login():
     print("扫码登陆……")
     itchat.auto_login(hotReload=True)
     print("登陆成功……获取微信联系人信息")
-    getAccount()
 
 
 def loginWithAutoReply():
@@ -356,16 +339,16 @@ def format_output(json_str):
 
 if __name__ == "__main__":
     login()
+    # getAccount()
     # loginWithAutoReply()
     # print(itchat.search_friends())  # 获取自己的用户信息，返回自己的属性字典
     # print(itchat.search_friends(wechatAccount='qq18667155877'))  # 获取特定UserName的用户信息
 
     # itchat.send('Hello, filehelper', toUserName='filehelper')# 发送信息给文件助手
 
-    get_head_image()
-    createImg(dotPx=640, img_name=account)  # 合成图片
+    # get_head_image()
+    # createImg(dotPx=640, img_name=account)  # 合成图片
     # removeIpg()
     # getSignature()
     # getFriendsList()
-    # createChatRoom()
     # sendGroupAssistant()  # 群发微信消息
