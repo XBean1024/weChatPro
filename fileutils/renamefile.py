@@ -31,15 +31,11 @@ def clean_list(file_p):
     return l
 
 
-if __name__ == '__main__':
-    path = '/Users/binny/study/PS/CS6'
-    file_list = get_file_list(path)
-    file_list = clean_list(file_list)
-    # print(file_list)
-    # print(len(file_list))
-    for res in file_list:
+# 文件重命名
+def rename_file(file_list_p):
+    for res in file_list_p:
         file_list_1 = get_file_list(res)
-        print(res)
+        # print(res)
         for k in file_list_1:
             if k.find('exe') != -1:
                 print(k[0:len(k) - 4])
@@ -49,3 +45,26 @@ if __name__ == '__main__':
                     os.rename(res, res + name)
                 except Exception as e:
                     print(repr(e))
+
+
+# 文件移除
+def remove_file(file_list_p):
+    for res in file_list_p:
+        file_list_1 = get_file_list(res)
+        # print(res)
+        for k in file_list_1:
+            if k.find('exe') == -1:
+                print(res + k)
+                try:
+                    os.remove(res + k)
+                except Exception as e:
+                    print(repr(e))
+
+
+if __name__ == '__main__':
+    path = '/Users/binny/study/PS/CS6'
+    file_list = get_file_list(path)
+    file_list = clean_list(file_list)
+    # print(file_list)
+    # print(len(file_list))
+    rename_file(file_list)
