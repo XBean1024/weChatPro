@@ -1,4 +1,22 @@
 # weChatPro
+
+## 该工程最初为了学习itchat而建，现在是一个python工具类
+
+
+## 开发日志：
+### 2018/8/16 
+    renamefile.py
+    
+    新增一个工具类，用来批量重命名mac 系统下的一个文件夹下的所有文件
+    原文件：/Users/binny/study/PS/CS6/094
+    重命名：/Users/binny/study/PS/CS6/094曲线调整
+    
+    说明：
+       原文件夹有两个文件
+       1、曲线调整.exe
+       2、教程使用说明.html
+       原文件名表意不明，故修改为序号名+其子文件名
+
 ### 开发环境
 ##### python3.6
 ##### [mac-osx 版本安装](https://www.python.org/downloads/mac-osx/)

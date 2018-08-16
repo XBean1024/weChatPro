@@ -9,6 +9,7 @@ import itchat
 import matplotlib.pyplot as plt
 import pygame
 from PIL import ImageFont
+from itchat.components.contact import create_chatroom
 from wordcloud import WordCloud
 
 # noinspection PyGlobalUndefined
@@ -301,6 +302,7 @@ def login():
     print("扫码登陆……")
     itchat.auto_login(hotReload=True)
     print("登陆成功……获取微信联系人信息")
+    getAccount()
 
 
 def loginWithAutoReply():
@@ -311,7 +313,7 @@ def loginWithAutoReply():
 
 
 def getAccount():
-    print("获取微信联系人……")
+    print("获取微信账号……")
     friends = itchat.get_friends(update=True)
     print("打印联系人信息……")
     print("登录账号为 ：" + friends[0]["PYQuanPin"])
@@ -352,3 +354,8 @@ if __name__ == "__main__":
     # getSignature()
     # getFriendsList()
     # sendGroupAssistant()  # 群发微信消息
+
+    memberList = itchat.get_friends()[1:]
+    # 创建群聊，topic键值为群聊名
+    chatroomUserName = itchat.create_chatroom(memberList, 'test chatroom')
+    print(chatroomUserName)
