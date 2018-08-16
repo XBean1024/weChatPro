@@ -2,8 +2,10 @@
 # -*- coding:utf-8 -*-
 import os
 
-
 # 获取文件件列表
+import shutil
+
+
 def get_file_list(path_p):
     file = os.path.exists(path_p)
     if not file:
@@ -31,8 +33,8 @@ def clean_list(file_p):
     return l
 
 
-# 文件重命名
-def rename_file(file_list_p):
+# 文件夹重命名
+def rename_dir(file_list_p):
     for res in file_list_p:
         file_list_1 = get_file_list(res)
         # print(res)
@@ -61,10 +63,30 @@ def remove_file(file_list_p):
                     print(repr(e))
 
 
+# 文件重命名
+def rename_file(path_p, list_p):
+    length = len(path_p)
+    print(length)
+    for res in list_p:
+        fl = os.listdir(res)
+        for f in fl:
+            print("文件夹 ：" + res[26:] + " === 文件：" + res + '/' + f)
+            # folder_name = res[26:]
+            # file_path = res + '/' + f
+
+            # os.rename(res + '/' + f, res + '/' + folder_name+'.exe')
+            shutil.move(res + '/' + f, path_p)
+
+
 if __name__ == '__main__':
     path = '/Users/binny/study/PS/CS6'
     file_list = get_file_list(path)
-    file_list = clean_list(file_list)
+    dir_list = clean_list(file_list)
+    print(len(file_list))
+    # rename_dir(dir_list)
+    # rename_file(path, dir_list)
     # print(file_list)
-    # print(len(file_list))
-    rename_file(file_list)
+    for f in file_list:
+        if f.find("exe") == -1:
+            print(path + '/' + f)
+            # os.remove(path + '/' + f)
