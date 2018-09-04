@@ -1,9 +1,12 @@
 #!/usr/bin/env python 
 # -*- coding:utf-8 -*-
+import math
 import os
 
 # 获取文件件列表
 import shutil
+
+from twisted.python.util import println
 
 
 def get_file_list(path_p):
@@ -80,13 +83,23 @@ def rename_file(path_p, list_p):
 
 if __name__ == '__main__':
     path = '/Users/binny/study/PS/CS6'
-    file_list = get_file_list(path)
-    dir_list = clean_list(file_list)
-    print(len(file_list))
+    # file_list = get_file_list(path)
+    # dir_list = clean_list(file_list)
+    # print(len(file_list))
+
     # rename_dir(dir_list)
     # rename_file(path, dir_list)
     # print(file_list)
-    for f in file_list:
-        if f.find("exe") == -1:
-            print(path + '/' + f)
-            # os.remove(path + '/' + f)
+    # for f in file_list:
+    #     if f.find("exe") == -1:
+    #         print(path + '/' + f)
+    #         # os.remove(path + '/' + f)
+    sums = 300
+    check = 1.003
+    checks = 0
+    for i in range(1, 241):
+        sums = sums * 1.003 + 300
+        checks = checks + math.pow(check, i)
+        println(i)
+        println(checks * 300)
+    println(sums)
