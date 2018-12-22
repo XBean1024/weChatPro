@@ -4,12 +4,10 @@ import os
 import re
 import time
 
-import Image
 import itchat
 import matplotlib.pyplot as plt
 import pygame
-from PIL import ImageFont
-from itchat.components.contact import create_chatroom
+from PIL import ImageFont, Image
 from wordcloud import WordCloud
 
 # noinspection PyGlobalUndefined
@@ -94,7 +92,7 @@ def createImg(dotPx, img_name):
     y = 0
     imgs = os.listdir(imgPath)
     # random.shuffle(imgs)
-    imgs = sortFile(imgs)
+    # imgs = sortFile(imgs)
     count = len(imgs)
     print("图片总数 = " + str(count))  # 1000
 
@@ -279,22 +277,50 @@ def getFriendsList():
 
 
 def sendGroupAssistant():
-    SINCERE_WISH = u'许彬彬\n\t祝 %s[%s]新年快乐！么么哒'
+    SINCERE_WISH = """很久没有联系了吧                                                                                                                                                                                                                                        
+    今天就是冬至节，记得吃饺子哦🤓
+    🥟🥟🥟🥟🥟🥟🥟🥟🥟🥟🥟🥟🥟🥟🥟🥟🥟🥟🥟🥟🥟🥟🥟🥟🥟🥟
+ 🥟🥟🥟🥟🥟🥟🥟🥟🥟🥟🥟🥟🥟🥟🥟🥟🥟🥟🥟🥟 
+ 🥟滴水成冰数九寒天🥟🥟🥟🥟🥟🥟🥟🥟🥟🥟
+ 🥟冬至到来心中惦念🥟🥟🥟🥟🥟🥟🥟🥟🥟🥟
+ 🥟朋友分别时间不短🥟🥟🥟🥟🥟🥟🥟🥟🥟🥟
+ 🥟各奔东西友情不断🥟🥟🥟🥟🥟🥟🥟🥟🥟🥟
+ 🥟微信祝福快快问安🥟🥟🥟🥟🥟🥟🥟🥟🥟🥟
+ 🥟祝福声声身边陪伴🥟🥟🥟🥟🥟🥟🥟🥟🥟🥟
+ 🥟不怕外面地冻天寒🥟🥟🥟🥟🥟🥟🥟🥟🥟🥟
+ 🥟深情厚谊赛过春天🥟🥟🥟🥟🥟🥟🥟🥟🥟🥟
+ 🥟🥟🥟🥟🥟🥟🥟🥟🥟🥟🥟🥟🥟🥟🥟🥟🥟🥟
+ 🥟祝微信昵称为：%s 的微信好友
+   至安泰，幸福一声🥟
+ 
+ 希望%s：\n
+❤5天后平安夜平平安安❤💙💜❤💛💙💜💚❤
+❤6天后圣诞节快快乐乐❤💙💜❤💛💙💜💚❤
+❤12天后元旦快乐❤💙💜❤💛💙💜💚❤
+❤38天后除夕夜快乐❤💙💜❤💛💙💜💚❤
+❤39天后新年快乐❤💙💜❤💛💙💜💚❤
+❤53天后情人节快乐❤💙💜❤💛💙💜💚❤
+❤54天后元宵节快乐❤💙💜❤💛💙💜💚❤
+
+天气冷了，注意保暖，感恩微信有你
+您的个性签名为：%s 
+
+ 
+        ---------来自远方的深切的问候！
+"""
     friendList = itchat.get_friends(update=True)[0:]  # 排除登录者本人的微信
     print("开始群发消息")
     print("您总共有 " + str(len(friendList)) + " 个好友")
+
     for count, friend in enumerate(friendList):
-        if count > 0:
+        msg = SINCERE_WISH % (friend['NickName'], friend['NickName'], friend['Signature'] or '您未设置个性签名.....')
+        if count > 0:  # 只发给一个人
             return
-            # 如果是演示目的，把下面的方法改为print即可
-        itchat.send("么么哒😘ლ(′◉❥◉｀ლ)", toUserName=friend['UserName'])
-        print(str(count))
-        itchat.send(
-            SINCERE_WISH % (friend['DisplayName'] or friend['NickName'], friend['RemarkName'] or friend['PYQuanPin']),
-            friend['UserName'])
-        print(str(count) + " " + SINCERE_WISH % (
-            friend['DisplayName'] or friend['NickName'], friend['RemarkName'] or friend['PYQuanPin']))
-        time.sleep(.5)
+        # itchat.send("Mi manchi", toUserName=friend['UserName'])
+        itchat.send(msg, toUserName=friend['UserName'])
+        print(str(count) + " " + msg)
+        time.sleep(1)
+
     print("群发完成")
 
 
@@ -341,8 +367,8 @@ def format_output(json_str):
 
 if __name__ == "__main__":
     login()
-    # getAccount()
     # loginWithAutoReply()
+    # getAccount()
     # print(itchat.search_friends())  # 获取自己的用户信息，返回自己的属性字典
     # print(itchat.search_friends(wechatAccount='qq18667155877'))  # 获取特定UserName的用户信息
 
@@ -352,10 +378,7 @@ if __name__ == "__main__":
     # createImg(dotPx=640, img_name=account)  # 合成图片
     # removeIpg()
     # getSignature()
-    # getFriendsList()
-    # sendGroupAssistant()  # 群发微信消息
 
-    memberList = itchat.get_friends()[1:]
-    # 创建群聊，topic键值为群聊名
-    chatroomUserName = itchat.create_chatroom(memberList, 'test chatroom')
-    print(chatroomUserName)
+    # getFriendsList()
+
+    sendGroupAssistant()  # 群发微信消息
